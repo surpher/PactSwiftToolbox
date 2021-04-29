@@ -22,12 +22,10 @@ let package = Package(
 	targets: [
 		.target(name: "PactSwiftToolbox", dependencies: []),
 		.testTarget(name: "PactSwiftToolboxTests", dependencies: ["PactSwiftToolbox"]),
-	],
+	]
 
 	// MARK: - Other Settings
 
-	swiftLanguageVersions: [
-		.version("5.3"),
-	]
+	// swiftLanguageVersions: [.version("5")]
 
 )
