@@ -37,7 +37,7 @@ public enum Logger {
 
 		if #available(iOS 10, OSX 10.14, *) {
 			os_log(
-				"Pact: %{private}s",
+				"PactSwift: %{private}s",
 				log: .default,
 				type: .default,
 				"\(message): \(stringData)"

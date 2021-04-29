@@ -17,7 +17,7 @@
 
 import Foundation
 
-public enum SocketBinder {
+@frozen public enum SocketBinder {
 
 	public static func unusedPort() -> Int32 {
 		var port = randomPort

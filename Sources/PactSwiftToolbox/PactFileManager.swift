@@ -17,7 +17,7 @@
 
 import Foundation
 
-public enum PactFileManager {
+@frozen public enum PactFileManager {
 
 	/// Where Pact contracts are written to.
 	///
