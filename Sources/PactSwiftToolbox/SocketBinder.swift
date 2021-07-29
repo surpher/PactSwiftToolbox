@@ -15,6 +15,8 @@
 //  IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 //
 
+#if !os(Linux)
+
 import Foundation
 
 @frozen public enum SocketBinder {
@@ -80,3 +82,5 @@ private extension SocketBinder {
 	}
 
 }
+
+#endif

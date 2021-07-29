@@ -16,13 +16,18 @@
 //
 
 import Foundation
+
+#if !os(Linux)
 import os.log
+#endif
+
+// TODO: - Use something like apple/swift-log instead of os.log
 
 public enum Logger {
 
-	/// Uses `os_log` to log Pact related messages.
+	/// Logs Pact related messages.
 	///
-	/// Looks for environment variable `PACT_ENABLE_LOGGING = "all"`. Can be set in project's scheme.
+	/// Looks for environment variable `PACT_ENABLE_LOGGING = "all"`. Can be set in project's scheme. Uses `os_log` on Apple platforms.
 	///
 	/// - Parameters:
 	///    - message: The message to log
@@ -36,20 +41,29 @@ public enum Logger {
 		let stringData = data.flatMap { String(data: $0, encoding: .utf8) } ?? ""
 
 		if #available(iOS 10, OSX 10.14, *) {
+			#if !os(Linux)
 			os_log(
 				"PactSwift: %{private}s",
 				log: .default,
 				type: .default,
 				"\(message): \(stringData)"
 			)
+			#else
+			print(message: "PactSwift: \(message)\n\(stringData)")
+			#endif
+
 		} else {
-			debugPrint("PactSwift: \(message)\n\(stringData)")
+			print(message: "PactSwift: \(message)\n\(stringData)")
 		}
 	}
 
 }
 
 private extension Logger {
+
+	static func print(message: String) {
+		debugPrint(message)
+	}
 
 	enum PactLoggingLevel: String {
 		case all
