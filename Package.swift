@@ -6,6 +6,14 @@ import PackageDescription
 let package = Package(
 	name: "PactSwiftToolbox",
 
+	// MARK: - Platforms
+
+	platforms: [
+		.macOS(.v11),
+		.iOS(.v12),
+		.tvOS(.v12)
+	],
+
 	// MARK: - Products
 
 	products: [
@@ -20,8 +28,17 @@ let package = Package(
 	// MARK: - Targets
 
 	targets: [
-		.target(name: "PactSwiftToolbox", dependencies: []),
-		.testTarget(name: "PactSwiftToolboxTests", dependencies: ["PactSwiftToolbox"]),
+		.target(
+			name: "PactSwiftToolbox",
+			dependencies: []
+		),
+
+		.testTarget(
+			name: "PactSwiftToolboxTests",
+			dependencies: [
+				"PactSwiftToolbox"
+			]
+		),
 	]
 
 	// MARK: - Other Settings
