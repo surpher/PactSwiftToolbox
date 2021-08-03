@@ -15,13 +15,14 @@
 //  IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 //
 
-#if !os(Linux)
-
 import Foundation
 
 @frozen public enum SocketBinder {
 
 	public static func unusedPort() -> Int32 {
+		#if os(Linux)
+		return getAvailablePort()
+		#else
 		var port = randomPort
 		var (available, _) = tcpPortAvailable(port: port)
 		while !available {
@@ -29,11 +30,39 @@ import Foundation
 			(available, _) = tcpPortAvailable(port: port)
 		}
 		return Int32(port)
+		#endif
 	}
 
 }
 
 private extension SocketBinder {
+
+	#if os(Linux)
+	static func getAvailablePort() -> Int32 {
+		let task = Process()
+		task.executableURL = URL(fileURLWithPath: "/bin/bash")
+		task.arguments = ["-c", #"comm -23 <(seq 49152 65535) <(ss -tan | awk '{print $4}' | cut -d':' -f2 | grep "[0-9]\{1,5\}" | sort | uniq) | shuf | head -n 1"#]
+
+		let pipe = Pipe()
+		task.standardOutput = pipe
+		task.standardError = pipe
+		do {
+			try task.run()
+		} catch {
+			fatalError(error.localizedDescription)
+		}
+
+		let data = pipe.fileHandleForReading.readDataToEndOfFile()
+		let output = String(data: data, encoding: .utf8)
+		task.waitUntilExit()
+
+		if let lines = output?.split(separator: "\n"), lines.count == 1, let port = Int32(lines[0]) {
+			return port
+		} else {
+			fatalError("Unable to find an available port! Please raise an issue at https://github.com/surpher/PactSwiftToolbox.")
+		}
+	}
+	#else
 
 	static var randomPort: in_port_t {
 		in_port_t(arc4random_uniform(2_000) + 4_000) // swiftlint:disable:this legacy_random
@@ -81,6 +110,6 @@ private extension SocketBinder {
 		String(cString: (UnsafePointer(strerror(errno))))
 	}
 
-}
+	#endif
 
-#endif
+}
