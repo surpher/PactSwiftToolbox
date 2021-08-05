@@ -38,10 +38,12 @@ import Foundation
 private extension SocketBinder {
 
 	#if os(Linux)
+	// This seems to be buggy...
+	// Reason: Optional("Send failure: Broken pipe") ???
 	static func getAvailablePort() -> Int32 {
 		let task = Process()
 		task.executableURL = URL(fileURLWithPath: "/bin/bash")
-		task.arguments = ["-c", #"comm -23 <(seq 1234 16384) <(ss -tan | awk '{print $4}' | cut -d':' -f2 | grep "[0-9]\{1,5\}" | sort | uniq) | shuf | head -n 1"#]
+		task.arguments = ["-c", #"comm -23 <(seq 49152 65535) <(ss -tan | awk '{print $4}' | cut -d':' -f2 | grep "[0-9]\{1,5\}" | sort | uniq) | shuf | head -n 1"#]
 
 		let pipe = Pipe()
 		task.standardOutput = pipe
@@ -49,14 +51,14 @@ private extension SocketBinder {
 		do {
 			try task.run()
 		} catch {
-			fatalError(error.localizedDescription)
+			fatalError("ERROR: \(#function):\(error.localizedDescription)")
 		}
 
 		let data = pipe.fileHandleForReading.readDataToEndOfFile()
 		let output = String(data: data, encoding: .utf8)
 		task.waitUntilExit()
 
-		if let lines = output?.split(separator: "\n"), lines.count == 1, let port = Int32(lines[0]) {
+		if let lines = output?.split(separator: "\n"), lines.isEmpty == false, let port = Int32(lines[0]) {
 			return port
 		} else {
 			fatalError("Unable to find an available port! Please raise an issue at https://github.com/surpher/PactSwiftToolbox.")
