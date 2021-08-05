@@ -41,7 +41,7 @@ private extension SocketBinder {
 	static func getAvailablePort() -> Int32 {
 		let task = Process()
 		task.executableURL = URL(fileURLWithPath: "/bin/bash")
-		task.arguments = ["-c", #"comm -23 <(seq 49152 65535) <(ss -tan | awk '{print $4}' | cut -d':' -f2 | grep "[0-9]\{1,5\}" | sort | uniq) | shuf | head -n 1"#]
+		task.arguments = ["-c", #"comm -23 <(seq 1234 16384) <(ss -tan | awk '{print $4}' | cut -d':' -f2 | grep "[0-9]\{1,5\}" | sort | uniq) | shuf | head -n 1"#]
 
 		let pipe = Pipe()
 		task.standardOutput = pipe
