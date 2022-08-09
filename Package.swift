@@ -17,13 +17,16 @@ let package = Package(
 	// MARK: - Products
 
 	products: [
-		.library(name: "PactSwiftToolbox", targets: ["PactSwiftToolbox"]),
+		.library(
+			name: "PactSwiftToolbox",
+			type: .dynamic,
+			targets: ["PactSwiftToolbox"]
+		),
 	],
 
 	// MARK: - Package Dependencies
 
-	dependencies: [
-	],
+	dependencies: [],
 
 	// MARK: - Targets
 
@@ -40,9 +43,5 @@ let package = Package(
 			]
 		),
 	]
-
-	// MARK: - Other Settings
-
-	// swiftLanguageVersions: [.version("5")]
 
 )
