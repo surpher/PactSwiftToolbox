@@ -21,7 +21,8 @@ import Foundation
 
 	/// Where Pact contracts are written to.
 	///
-	/// ## macOS
+	/// macOS:
+	///
 	/// Running tests for macOS it will default to app's Documents folder:
 	///
 	/// (eg: `~/Library/Containers/au.com.pact-foundation.Pact-macOS-Example/Data/Documents`)
@@ -30,7 +31,7 @@ import Foundation
 	/// If testing a macOS app that is not sandboxed, define a `PACT_OUTPUT_DIR` Environment Variable (in the scheme)
 	/// with the path to where you want Pact contracts to be written to.
 	///
-	/// ## iOS/tvOS or non-Xcode project
+	/// iOS/tvOS or non-Xcode project:
 	///
 	/// Default location where Pact contracts are written is `/tmp/pacts` and can be overwritten
 	/// with a `PACT_OUTPUT_DIR` environment variable set to an absolute path (eg: `$(PROJECT_DIR)/tmp/pacts`).
